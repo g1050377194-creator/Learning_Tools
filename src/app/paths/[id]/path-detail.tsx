@@ -58,14 +58,22 @@ export function PathDetail() {
     }
   }
 
-  async function attach(stageId: string) {
-    const deckId = linkChoice[stageId];
+  async function attach(stageId: string, deckId: string | null) {
     if (!deckId) {
       toast.error("先选一个已有牌组");
       return;
     }
-    await linkStageDeck(path!.id, stageId, deckId);
-    toast.success("已关联牌组");
+    if (path?.stages.some((stage) => stage.id === stageId && stage.deckId === deckId)) {
+      setLinkChoice((current) => ({ ...current, [stageId]: deckId }));
+      return;
+    }
+    setLinkChoice((current) => ({ ...current, [stageId]: deckId }));
+    try {
+      await linkStageDeck(path!.id, stageId, deckId);
+      toast.success("已关联牌组");
+    } catch (error) {
+      toast.error(error instanceof Error ? error.message : "没有关联上");
+    }
   }
 
   return (
@@ -139,8 +147,11 @@ export function PathDetail() {
                 {data.decks.length > 0 ? (
                   <div className="flex flex-1 flex-wrap items-center gap-2">
                     <Select
-                      value={linkChoice[stage.id] ?? null}
-                      onValueChange={(value) => value && setLinkChoice((current) => ({ ...current, [stage.id]: value }))}
+                      value={linkChoice[stage.id] ?? stage.deckId ?? null}
+                      onValueChange={(value) => {
+                        if (!value || value === stage.deckId) return;
+                        void attach(stage.id, value);
+                      }}
                       items={data.decks.map((item) => ({ value: item.id, label: item.name }))}
                     >
                       <SelectTrigger className="w-full sm:w-56">
@@ -154,7 +165,7 @@ export function PathDetail() {
                         ))}
                       </SelectContent>
                     </Select>
-                    <Button type="button" variant="outline" onClick={() => void attach(stage.id)}>
+                    <Button type="button" variant="outline" onClick={() => void attach(stage.id, linkChoice[stage.id] ?? stage.deckId)}>
                       关联
                     </Button>
                   </div>
