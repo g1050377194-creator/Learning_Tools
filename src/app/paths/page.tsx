@@ -41,14 +41,15 @@ export default function PathsPage() {
     }
     setStatus("loading");
     setError("");
-    const input = { goal: trimmed, level, weeklyHours: hours };
+    const weeklyHours = Math.min(40, Math.max(1, Math.round(Number(hours)) || 1));
+    const input = { goal: trimmed, level, weeklyHours };
     const useModel = !forceOffline && models.ready && models.current;
     try {
       const draft = useModel ? await requestPath(input, models.current!) : offlinePath(input);
       const saved = await savePath(draft, {
         goal: trimmed,
         level,
-        weeklyHours: hours,
+        weeklyHours,
         source: useModel ? "ai" : "offline",
       });
       router.push(`/paths/${saved.id}`);

@@ -112,10 +112,15 @@ export function providerPreset(id: ProviderId) {
 
 export function saveModel(input: ModelConfig) {
   const snapshot = readSnapshot();
-  const models = snapshot.models.some((item) => item.id === input.id)
+  const exists = snapshot.models.some((item) => item.id === input.id);
+  const models = exists
     ? snapshot.models.map((item) => (item.id === input.id ? input : item))
     : [...snapshot.models, input];
-  const activeId = snapshot.activeId && models.some((item) => item.id === snapshot.activeId) ? snapshot.activeId : input.id;
+  const activeId = exists
+    ? snapshot.activeId && models.some((item) => item.id === snapshot.activeId)
+      ? snapshot.activeId
+      : input.id
+    : input.id;
   write(models, activeId);
 }
 

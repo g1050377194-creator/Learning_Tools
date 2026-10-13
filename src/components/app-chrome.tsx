@@ -75,7 +75,7 @@ export function AppChrome() {
             );
           })}
         </nav>
-        <p className="px-5 py-4 text-xs leading-5 text-muted-foreground">
+        <p className="px-5 pt-4 pb-16 text-xs leading-5 text-muted-foreground">
           {models.ready ? `模型 · ${models.current?.displayName}` : "离线模式"}
         </p>
       </aside>
@@ -85,6 +85,9 @@ export function AppChrome() {
           <Mark />
           <span className="font-heading text-lg">循迹</span>
         </Link>
+        <p className="min-w-0 flex-1 truncate px-3 text-center text-[11px] text-muted-foreground">
+          {models.ready ? models.current?.displayName : "离线模式"}
+        </p>
         <div className="flex items-center gap-3 text-sm">
           <Link href="/decks" className={cn(isActive(pathname, "/decks") && "text-primary")}>
             牌组

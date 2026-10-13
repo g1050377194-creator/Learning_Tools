@@ -59,16 +59,16 @@ export default function ReadPage() {
   }
 
   async function ensureDeck() {
-    if (deckId) return deckId;
     const name = newDeck.trim();
-    if (!name) {
-      toast.error("先选择牌组，或写一个新牌组的名字");
-      return "";
+    if (name) {
+      const deck = await createDeck({ name, description: "从阅读里收下的卡片" });
+      setDeckChoice(deck.id);
+      setNewDeck("");
+      return deck.id;
     }
-    const deck = await createDeck({ name, description: "从阅读里收下的卡片" });
-    setDeckChoice(deck.id);
-    setNewDeck("");
-    return deck.id;
+    if (deckId) return deckId;
+    toast.error("先选择牌组，或写一个新牌组的名字");
+    return "";
   }
 
   async function addWord(item: VocabItem, kind: "vocab" | "cloze") {

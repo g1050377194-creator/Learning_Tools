@@ -378,7 +378,7 @@ export function offlineRead(passage: string): ReadResult {
   const summarySource = paragraphs
     .map((paragraph) => splitSentences(paragraph)[0] ?? paragraph)
     .filter(Boolean);
-  const summary = clip(summarySource.join(""), 220) || "这篇材料太短，摘要就是原文本身。";
+  const summary = clip(summarySource.join(" "), 220) || "这篇材料太短，摘要就是原文本身。";
   const explained = paragraphs.map((paragraph, index) => {
     const sentences = splitSentences(paragraph);
     const lead = sentences[0] ?? paragraph;
@@ -397,7 +397,7 @@ export function offlineRead(passage: string): ReadResult {
     .filter((sentence) => {
       const words = sentence.split(/\s+/).length;
       const cjk = sentence.match(/[\u4e00-\u9fff]/g)?.length ?? 0;
-      return words >= 18 || cjk >= 36 || /although|however|because|尽管|然而|因为|如果/.test(sentence);
+      return words >= 16 || cjk >= 36 || /although|however|because|尽管|然而|因为|如果/.test(sentence);
     })
     .slice(0, 5)
     .map((sentence) => ({

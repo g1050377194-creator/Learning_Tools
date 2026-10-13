@@ -17,10 +17,6 @@ import type {
 
 export async function loadStudy(): Promise<StudyData> {
   const db = getDb();
-  const existing = await db.prefs.get("prefs");
-  if (!existing) {
-    await db.prefs.put({ id: "prefs", desiredRetention: 0.9 });
-  }
   const [decks, cards, logs, paths, prefs] = await Promise.all([
     db.decks.toArray(),
     db.cards.toArray(),

@@ -127,7 +127,7 @@ export function PracticeSession() {
             </Button>
           </div>
           <Tabs value={mode} onValueChange={(value) => setMode(value as Mode)}>
-            <TabsList className="h-auto w-full flex-wrap justify-start">
+            <TabsList className="h-auto! w-full flex-wrap justify-start">
               {MODES.map((item) => (
                 <TabsTrigger key={item.id} value={item.id}>
                   {item.label}

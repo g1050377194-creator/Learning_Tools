@@ -25,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
             <main className="mx-auto w-full max-w-5xl px-4 py-6 pb-24 md:px-8 md:py-8">{children}</main>
           </div>
         </StudyProvider>
-        <Toaster position="top-center" />
+        <Toaster position="top-right" offset={{ top: 16, right: 16 }} mobileOffset={{ top: 64, right: 12 }} />
       </body>
     </html>
   );
